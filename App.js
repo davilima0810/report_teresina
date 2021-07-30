@@ -12,11 +12,12 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
+import { Icon } from 'react-native-elements';
 
 import * as ImagePicker from "expo-image-picker";
 
 import * as Location from "expo-location";
-import MapView from "react-native-maps";
+// import MapView from "react-native-maps";
 import Axios from "axios";
 
 export default function App() {
@@ -68,13 +69,18 @@ export default function App() {
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [9, 16],
+      aspect: [1, 1],
       quality: 1,
     });
 
     if (!result.cancelled) {
       setImage(result.uri);
     }
+  }, []);
+
+  const DeleteImage = useCallback(async () => {
+    setImage(null);
+    
   }, []);
 
   const uploadItems = useCallback(async () => {
@@ -114,21 +120,27 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.label}>Localização</Text>
-      <MapView
-        style={{ width: "100%", height: "40%" }}
-        region={location}
-        showsUserLocation
-      />
+      <Text style={styles.title}>Denuncias de Serviços Fiscais de Teresina</Text>
       <Text style={styles.label}>Midia</Text>
       <TouchableOpacity style={styles.button} onPress={PickImage}>
         <Text style={styles.buttonText}>
-          {!!image ? "Foto salva" : "Tirar foto"}
+          {!!image ? "Foto salva"  : "Tirar foto"}
         </Text>
       </TouchableOpacity>
-      {/* {image && (
-        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-      )} */}
+      {image && (
+        <View style={{width: 200, height: 200 , marginTop: 20}}>
+          <TouchableOpacity style={styles.circle} onPress={DeleteImage}>
+            
+              <Icon name='x-circle'
+                type='feather'
+                color='#999'
+                style={{left: "0%"}}
+                />
+            
+          </TouchableOpacity>
+          <Image source={{ uri: image }} style={{  zIndex: 10, width: "100%", height: "100%" , alignSelf: "center" }} />
+        </View>
+      )}
 
       <Text style={styles.label}>Descrição</Text>
       <TextInput
@@ -171,6 +183,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  title:{
+    textAlign: "center",
+    width: "80%",
+    fontSize: 20
+  },
   send: {
     width: 200,
     height: 50,
@@ -191,6 +208,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
+  },
+  circle:{
+    width: "100%",
+    alignItems: "flex-end",
   },
   label: {
     alignSelf: "flex-start",
