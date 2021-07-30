@@ -102,7 +102,7 @@ export default function App() {
         "Content-Type": "multipart/form-data",
       };
 
-      await Axios.post("http://projetospref.com/services/denuncias/api", data, {
+      await Axios.post("http://", data, {
         headers,
       });
 
